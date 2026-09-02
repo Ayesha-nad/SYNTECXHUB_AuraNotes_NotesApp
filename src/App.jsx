@@ -106,7 +106,7 @@ function MainApp() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 bg-dot-pattern transition-colors duration-500 flex flex-col overflow-x-hidden">
+    <div className="relative min-h-screen w-full max-w-full bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 bg-dot-pattern transition-colors duration-500 flex flex-col overflow-x-hidden">
       {/* Ambient background animated blur orbs */}
       <div className="ambient-glow-1" />
       <div className="ambient-glow-2" />
@@ -122,8 +122,8 @@ function MainApp() {
         onFocusNewNote={handleFocusNewNote}
       />
 
-      {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content Area - exact full fit on mobile without cuts */}
+      <main className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Expandable Note Creator / Inline Editor */}
         <NoteForm
           onAddNote={addNote}
@@ -167,12 +167,12 @@ function MainApp() {
       </main>
 
       {/* Floating Action Button (for mobile quick add) */}
-      <div className="fixed bottom-6 left-6 z-30 sm:hidden">
+      <div className="fixed bottom-5 right-4 z-30 sm:hidden">
         <motion.button
-          whileHover={{ scale: 1.15, rotate: 90 }}
+          whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleFocusNewNote}
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white shadow-soft-xl flex items-center justify-center border-2 border-white dark:border-slate-800 cursor-pointer"
+          className="w-13 h-13 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white shadow-soft-xl flex items-center justify-center border-2 border-white dark:border-slate-800 cursor-pointer shadow-indigo-600/40"
           aria-label="Create note"
         >
           <Plus className="w-6 h-6" />
@@ -198,7 +198,7 @@ function MainApp() {
       />
 
       {/* Minimal Footer */}
-      <footer className="relative z-10 mt-auto py-6 border-t border-slate-200/60 dark:border-slate-800/60 text-center text-xs text-slate-400 dark:text-slate-500 font-medium">
+      <footer className="relative z-10 mt-auto py-4 sm:py-6 border-t border-slate-200/60 dark:border-slate-800/60 text-center text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 font-medium px-3">
         <p>AuraNotes — Built with React, Tailwind CSS & Framer Motion. Data stored locally.</p>
       </footer>
     </div>

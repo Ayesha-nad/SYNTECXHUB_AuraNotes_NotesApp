@@ -154,10 +154,10 @@ export default function NoteForm({
         tags,
       });
 
-      // Joyful confetti on note creation
+      // Confetti burst
       confetti({
-        particleCount: 40,
-        spread: 70,
+        particleCount: 35,
+        spread: 60,
         origin: { y: 0.35, x: 0.5 },
         colors: ["#6366F1", "#A855F7", "#EC4899", "#3B82F6", "#10B981"],
         disableForReducedMotion: true,
@@ -166,7 +166,6 @@ export default function NoteForm({
       showSuccess("New note created!");
       handleReset();
 
-      // Refocus input immediately for rapid note-taking
       setTimeout(() => {
         titleInputRef.current?.focus();
       }, 50);
@@ -202,12 +201,12 @@ export default function NoteForm({
   const { words, chars } = getWordAndCharCount(content);
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-10 px-2 sm:px-0">
+    <div className="w-full max-w-2xl mx-auto mb-6 sm:mb-10 px-0">
       <motion.div
         ref={containerRef}
         layout
         transition={{ type: "spring", stiffness: 350, damping: 30 }}
-        className={`relative rounded-3xl transition-all duration-300 border backdrop-blur-2xl shadow-soft-lg overflow-hidden ${
+        className={`relative w-full rounded-2xl sm:rounded-3xl transition-all duration-300 border backdrop-blur-2xl shadow-soft-lg overflow-hidden ${
           colorConfig.light.cardBg
         } dark:${colorConfig.dark.cardBg} ${
           colorConfig.light.border
@@ -215,37 +214,37 @@ export default function NoteForm({
           isExpanded ? "ring-2 ring-indigo-500/30 shadow-glow-indigo dark:shadow-glow-indigo" : ""
         }`}
       >
-        {/* Color accent strip on left with animated width */}
+        {/* Color accent strip on left */}
         <motion.div
           layout
-          className={`absolute top-0 left-0 bottom-0 w-1.5 transition-colors duration-300 ${
+          className={`absolute top-0 left-0 bottom-0 w-1 sm:w-1.5 transition-colors duration-300 ${
             colorConfig.light.accent
           } dark:${colorConfig.dark.accent}`}
         />
 
-        <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="p-4 sm:p-5 pl-5 sm:pl-6">
+        <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="p-3.5 sm:p-5 pl-4 sm:pl-6 w-full">
           {/* Header Row: Title & Pin Toggle */}
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
             <input
               ref={titleInputRef}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              placeholder={isExpanded ? "Note Title..." : "Take a note... (Ctrl + N)"}
-              className="w-full bg-transparent font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none tracking-tight"
+              placeholder={isExpanded ? "Note Title..." : "Take a note..."}
+              className="w-full min-w-0 flex-1 bg-transparent font-bold text-sm sm:text-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none tracking-tight truncate"
             />
 
             {/* Pin Toggle Button */}
             <motion.button
               type="button"
-              whileHover={{ scale: 1.2, rotate: pinned ? 45 : 15 }}
+              whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.85 }}
               onClick={() => {
                 setPinned(!pinned);
                 setIsExpanded(true);
               }}
-              className={`p-2 rounded-xl transition-all cursor-pointer ${
+              className={`p-1.5 sm:p-2 rounded-xl shrink-0 transition-all cursor-pointer ${
                 pinned
                   ? "bg-amber-100 text-amber-600 dark:bg-amber-950/80 dark:text-amber-400 shadow-soft-sm"
                   : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
@@ -253,24 +252,19 @@ export default function NoteForm({
               title={pinned ? "Unpin note" : "Pin note to top"}
               aria-label="Toggle pin"
             >
-              <motion.div
-                animate={{ rotate: pinned ? 45 : 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <Pin className={`w-4 h-4 ${pinned ? "fill-current text-amber-500" : ""}`} />
-              </motion.div>
+              <Pin className={`w-4 h-4 ${pinned ? "fill-current rotate-45 text-amber-500" : ""}`} />
             </motion.button>
           </div>
 
-          {/* Expandable Section: Content Area + Tags + Colors + Action Bar */}
+          {/* Expandable Section */}
           <AnimatePresence initial={false}>
             {isExpanded && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-                className="space-y-4 pt-3"
+                transition={{ duration: 0.28, ease: [0.04, 0.62, 0.23, 0.98] }}
+                className="space-y-3 sm:space-y-4 pt-2.5 sm:pt-3 w-full"
               >
                 {/* Textarea for Note Content */}
                 <textarea
@@ -278,23 +272,20 @@ export default function NoteForm({
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder="Write your thoughts, checklist, or ideas..."
-                  rows={4}
-                  className="w-full bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none resize-none leading-relaxed font-normal"
+                  rows={3}
+                  className="w-full bg-transparent text-xs sm:text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none resize-none leading-relaxed font-normal"
                 />
 
                 {/* Selected Tags Display */}
                 {tags.length > 0 && (
-                  <motion.div
-                    layout
-                    className="flex flex-wrap gap-1.5 pt-1"
-                  >
+                  <motion.div layout className="flex flex-wrap gap-1 sm:gap-1.5 pt-0.5">
                     {tags.map((tag) => (
                       <motion.span
                         key={tag}
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.8, opacity: 0 }}
-                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-semibold bg-indigo-100/90 text-indigo-800 dark:bg-indigo-950/90 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 shadow-soft-sm"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] sm:text-xs font-semibold bg-indigo-100/90 text-indigo-800 dark:bg-indigo-950/90 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 shadow-soft-sm"
                       >
                         #{tag}
                         <button
@@ -313,48 +304,43 @@ export default function NoteForm({
                 <AnimatePresence>
                   {showTagPicker && (
                     <motion.div
-                      initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                      initial={{ opacity: 0, y: -6, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -6, scale: 0.96 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 28 }}
-                      className="p-3.5 rounded-2xl bg-white/95 dark:bg-[#101726]/95 border border-slate-200 dark:border-slate-800 shadow-soft-xl space-y-2.5 backdrop-blur-md"
+                      className="p-3 rounded-2xl bg-white/95 dark:bg-[#101726]/95 border border-slate-200 dark:border-slate-800 shadow-soft-xl space-y-2 backdrop-blur-md w-full"
                     >
-                      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">Select or add tags</p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Select or add tags</p>
+                      <div className="flex flex-wrap gap-1 sm:gap-1.5">
                         {DEFAULT_TAGS.map((t) => (
-                          <motion.button
+                          <button
                             key={t}
                             type="button"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
                             onClick={() => toggleTag(t)}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                            className={`px-2 sm:px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
                               tags.includes(t)
                                 ? "bg-indigo-600 text-white shadow-soft-sm"
                                 : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                             }`}
                           >
                             #{t}
-                          </motion.button>
+                          </button>
                         ))}
                       </div>
-                      <div className="flex gap-1.5 pt-1">
+                      <div className="flex gap-1.5 pt-1 w-full">
                         <input
                           type="text"
                           value={customTagInput}
                           onChange={(e) => setCustomTagInput(e.target.value)}
-                          placeholder="Add custom tag..."
-                          className="flex-1 px-2.5 py-1 text-xs rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                          placeholder="Custom tag..."
+                          className="min-w-0 flex-1 px-2.5 py-1 text-xs rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         />
-                        <motion.button
-                          whileHover={{ scale: 1.04 }}
-                          whileTap={{ scale: 0.96 }}
+                        <button
                           type="button"
                           onClick={handleAddCustomTag}
-                          className="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 cursor-pointer shadow-soft-sm"
+                          className="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 cursor-pointer shrink-0"
                         >
                           Add
-                        </motion.button>
+                        </button>
                       </div>
                     </motion.div>
                   )}
@@ -364,119 +350,101 @@ export default function NoteForm({
                 <AnimatePresence>
                   {showColorPicker && (
                     <motion.div
-                      initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                      initial={{ opacity: 0, y: -6, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -6, scale: 0.96 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 28 }}
-                      className="flex items-center gap-2 p-2.5 rounded-2xl bg-white/95 dark:bg-[#101726]/95 border border-slate-200 dark:border-slate-800 shadow-soft-xl backdrop-blur-md overflow-x-auto"
+                      className="flex items-center gap-1.5 sm:gap-2 p-2 sm:p-2.5 rounded-2xl bg-white/95 dark:bg-[#101726]/95 border border-slate-200 dark:border-slate-800 shadow-soft-xl backdrop-blur-md overflow-x-auto max-w-full scrollbar-none"
                     >
                       {NOTE_COLORS.map((c) => (
-                        <motion.button
+                        <button
                           key={c.id}
                           type="button"
-                          whileHover={{ scale: 1.25 }}
-                          whileTap={{ scale: 0.9 }}
                           onClick={() => setColor(c.id)}
                           title={c.name}
                           style={{ backgroundColor: c.swatch }}
-                          className={`w-7 h-7 rounded-full border border-black/10 dark:border-white/20 transition-all flex items-center justify-center shrink-0 cursor-pointer ${
+                          className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-black/10 dark:border-white/20 transition-all flex items-center justify-center shrink-0 cursor-pointer ${
                             color === c.id
                               ? "ring-2 ring-indigo-600 scale-110 shadow-soft"
                               : "hover:scale-105"
                           }`}
                         >
                           {color === c.id && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                            >
-                              <Check className="w-4 h-4 text-slate-800" />
-                            </motion.div>
+                            <Check className="w-3.5 h-3.5 text-slate-800" />
                           )}
-                        </motion.button>
+                        </button>
                       ))}
                     </motion.div>
                   )}
                 </AnimatePresence>
 
                 {/* Bottom Control Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/50 dark:border-slate-800/50">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200/50 dark:border-slate-800/50 w-full">
                   {/* Tool buttons: Color, Tag, Word stats */}
-                  <div className="flex items-center gap-1.5">
-                    {/* Color Swatch Trigger */}
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                  <div className="flex items-center gap-1">
+                    <button
                       type="button"
                       onClick={() => {
                         setShowColorPicker(!showColorPicker);
                         setShowTagPicker(false);
                       }}
-                      className={`p-2 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`p-1.5 sm:p-2 rounded-xl text-xs font-medium flex items-center gap-1 transition-all cursor-pointer ${
                         showColorPicker
-                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 shadow-soft-sm"
+                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
                           : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                       }`}
                       title="Select card color"
                     >
-                      <Palette className="w-4 h-4" />
-                      <span className="hidden sm:inline">Color</span>
-                    </motion.button>
+                      <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="text-[11px] sm:text-xs">Color</span>
+                    </button>
 
-                    {/* Tag Trigger */}
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       type="button"
                       onClick={() => {
                         setShowTagPicker(!showTagPicker);
                         setShowColorPicker(false);
                       }}
-                      className={`p-2 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`p-1.5 sm:p-2 rounded-xl text-xs font-medium flex items-center gap-1 transition-all cursor-pointer ${
                         showTagPicker
-                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 shadow-soft-sm"
+                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
                           : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                       }`}
                       title="Add tags"
                     >
-                      <TagIcon className="w-4 h-4" />
-                      <span className="hidden sm:inline">Tags</span>
-                    </motion.button>
+                      <TagIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <span className="text-[11px] sm:text-xs">Tags</span>
+                    </button>
 
-                    {/* Word and Character Count */}
                     {(chars > 0 || words > 0) && (
-                      <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500 ml-2 hidden sm:inline">
-                        {words} {words === 1 ? "word" : "words"} • {chars} chars
+                      <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 ml-1 hidden min-[400px]:inline">
+                        {words}w • {chars}c
                       </span>
                     )}
                   </div>
 
                   {/* Action Buttons: Cancel + Save */}
-                  <div className="flex items-center gap-2">
-                    <motion.button
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.95 }}
+                  <div className="flex items-center gap-1.5 ml-auto">
+                    <button
                       type="button"
                       onClick={handleCancel}
-                      className="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                      className="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       Cancel
-                    </motion.button>
+                    </button>
 
                     <motion.button
                       type="submit"
-                      whileHover={{ scale: 1.04, translateY: -1 }}
+                      whileHover={{ scale: 1.04 }}
                       whileTap={{ scale: 0.96 }}
                       disabled={!title.trim() && !content.trim()}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-soft transition-all ${
+                      className={`px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 shadow-soft transition-all ${
                         title.trim() || content.trim()
-                          ? "bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-indigo-600/30 cursor-pointer"
+                          ? "bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-indigo-600/30 cursor-pointer"
                           : "bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed"
                       }`}
                     >
-                      <span>{editingNote ? "Update Note" : "Save Note"}</span>
-                      <CornerDownLeft className="w-3.5 h-3.5 opacity-80" />
+                      <span>{editingNote ? "Update" : "Save"}</span>
+                      <CornerDownLeft className="w-3 h-3 opacity-80" />
                     </motion.button>
                   </div>
                 </div>

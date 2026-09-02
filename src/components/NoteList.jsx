@@ -33,19 +33,19 @@ export default function NoteList({
   const showSeparatedSections = sortBy === "pinned-first" && pinnedNotes.length > 0 && otherNotes.length > 0;
 
   return (
-    <div className="w-full space-y-10">
+    <div className="w-full space-y-6 sm:space-y-10">
       {showSeparatedSections ? (
         <>
           {/* Pinned Notes Section */}
-          <section className="space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+          <section className="space-y-3 sm:space-y-4 w-full">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 px-0.5">
               <Pin className="w-3.5 h-3.5 fill-current rotate-45" />
               <span>Pinned Notes ({pinnedNotes.length})</span>
             </div>
             
             <motion.div
               layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5 w-full"
             >
               <AnimatePresence mode="popLayout">
                 {pinnedNotes.map((note) => (
@@ -65,15 +65,15 @@ export default function NoteList({
           </section>
 
           {/* Other Notes Section */}
-          <section className="space-y-4 pt-4 border-t border-slate-200/60 dark:border-slate-800/60">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+          <section className="space-y-3 sm:space-y-4 pt-4 sm:pt-6 border-t border-slate-200/60 dark:border-slate-800/60 w-full">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-0.5">
               <Layers className="w-3.5 h-3.5" />
               <span>Other Notes ({otherNotes.length})</span>
             </div>
 
             <motion.div
               layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5 w-full"
             >
               <AnimatePresence mode="popLayout">
                 {otherNotes.map((note) => (
@@ -96,7 +96,7 @@ export default function NoteList({
         /* Unified Grid for other sort modes or when all/none are pinned */
         <motion.div
           layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-5 w-full"
         >
           <AnimatePresence mode="popLayout">
             {filteredNotes.map((note) => (

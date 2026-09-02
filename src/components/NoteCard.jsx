@@ -68,7 +68,7 @@ export default function NoteCard({
   return (
     <motion.div
       layout="position"
-      initial={{ opacity: 0, scale: 0.88, y: 25 }}
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
       animate={{ 
         opacity: 1, 
         scale: 1, 
@@ -83,12 +83,11 @@ export default function NoteCard({
         transition: { duration: 0.22, ease: "easeInOut" }
       }}
       whileHover={{ 
-        y: -6, 
-        scale: 1.015,
+        y: -4,
         transition: { type: "spring", stiffness: 400, damping: 20 }
       }}
       onClick={() => onViewNote(note)}
-      className={`group relative rounded-3xl p-5 sm:p-6 transition-colors duration-300 border flex flex-col justify-between cursor-pointer overflow-hidden backdrop-blur-xl ${
+      className={`group relative w-full max-w-full rounded-2xl sm:rounded-3xl p-4 sm:p-5 transition-colors duration-300 border flex flex-col justify-between cursor-pointer overflow-hidden backdrop-blur-xl min-w-0 ${
         colorConfig.light.cardBg
       } dark:${colorConfig.dark.cardBg} ${
         colorConfig.light.border
@@ -96,166 +95,123 @@ export default function NoteCard({
         isRecentlySaved ? "ring-2 ring-indigo-500 shadow-glow-indigo animate-pulse-subtle" : ""
       }`}
     >
-      {/* Colored Left Accent Border with smooth transition */}
+      {/* Colored Left Accent Border */}
       <motion.div
         layout
-        className={`absolute top-0 left-0 bottom-0 w-1.5 transition-colors duration-300 ${
+        className={`absolute top-0 left-0 bottom-0 w-1 sm:w-1.5 transition-colors duration-300 ${
           colorConfig.light.accent
         } dark:${colorConfig.dark.accent}`}
       />
 
       {/* Top Card Area: Pin & Title & Actions */}
-      <div>
-        <div className="flex items-start justify-between gap-2.5 mb-2.5">
+      <div className="w-full min-w-0">
+        <div className="flex items-start justify-between gap-2 mb-2 w-full">
           {/* Note Title */}
-          <h3 className="font-bold text-base text-slate-900 dark:text-slate-100 tracking-tight leading-snug line-clamp-2 pr-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 tracking-tight leading-snug line-clamp-2 pr-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors break-words min-w-0 flex-1">
             {note.title || <span className="italic text-slate-400 font-normal">Untitled Note</span>}
           </h3>
 
           {/* Pin Button */}
           <motion.button
-            whileHover={{ scale: 1.25, rotate: note.pinned ? 45 : 15 }}
+            whileHover={{ scale: 1.25 }}
             whileTap={{ scale: 0.85 }}
             onClick={handlePin}
             className={`p-1.5 rounded-xl shrink-0 transition-all cursor-pointer ${
               note.pinned
                 ? "bg-amber-100 text-amber-600 dark:bg-amber-950/90 dark:text-amber-400 shadow-soft-sm"
-                : "opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80"
+                : "opacity-80 sm:opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80"
             }`}
             title={note.pinned ? "Unpin note" : "Pin to top"}
             aria-label={note.pinned ? "Unpin note" : "Pin note"}
           >
-            <motion.div
-              animate={{ rotate: note.pinned ? 45 : 0 }}
-              transition={{ type: "spring", stiffness: 450, damping: 25 }}
-            >
-              <Pin className={`w-4 h-4 ${note.pinned ? "fill-current text-amber-500" : ""}`} />
-            </motion.div>
+            <Pin className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${note.pinned ? "fill-current rotate-45 text-amber-500" : ""}`} />
           </motion.button>
         </div>
 
         {/* Note Content Preview */}
         {note.content && (
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal line-clamp-6 whitespace-pre-line mb-3">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal line-clamp-5 whitespace-pre-line mb-2.5 break-words">
             {note.content}
           </p>
         )}
 
         {/* Tags Row */}
         {note.tags && note.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 my-2.5">
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 my-2 w-full">
             {note.tags.map((tag) => (
-              <motion.span
+              <span
                 key={tag}
-                whileHover={{ scale: 1.05 }}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-slate-100/90 text-slate-700 dark:bg-slate-800/90 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/60 shadow-soft-sm"
+                className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-[10px] sm:text-[11px] font-semibold bg-slate-100/90 text-slate-700 dark:bg-slate-800/90 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/60 shadow-soft-sm truncate max-w-[150px]"
               >
-                <TagIcon className="w-2.5 h-2.5 opacity-60" />
-                {tag}
-              </motion.span>
+                <TagIcon className="w-2.5 h-2.5 opacity-60 shrink-0" />
+                <span className="truncate">{tag}</span>
+              </span>
             ))}
           </div>
         )}
       </div>
 
-      {/* Card Footer: Timestamp & Quick Action Toolbar */}
-      <div className="pt-3 mt-1 border-t border-slate-200/50 dark:border-slate-800/50 flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
+      {/* Card Footer: Timestamp & Action Toolbar */}
+      <div className="pt-2.5 sm:pt-3 mt-1 border-t border-slate-200/50 dark:border-slate-800/50 flex items-center justify-between gap-1.5 text-xs text-slate-400 dark:text-slate-500 w-full">
         {/* Relative Timestamp */}
-        <span className="font-medium text-[11px] tracking-wide">
+        <span className="font-medium text-[10px] sm:text-[11px] tracking-wide shrink-0">
           {formatRelativeTime(note.updatedAt || note.createdAt)}
         </span>
 
-        {/* Hover-revealed quick actions */}
-        <div className="flex items-center gap-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {/* Quick actions - always visible on mobile, hover revealed on desktop */}
+        <div className="flex items-center gap-0.5 sm:gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           {/* Copy Button */}
-          <motion.button
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.88 }}
+          <button
             onClick={handleCopy}
-            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
             title="Copy content"
             aria-label="Copy note content"
           >
-            <AnimatePresence mode="wait">
-              {copied ? (
-                <motion.div
-                  key="check"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                >
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                </motion.div>
-              ) : (
-                <motion.div key="copy" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
-                  <Copy className="w-3.5 h-3.5" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+          </button>
 
           {/* Full View Modal */}
-          <motion.button
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.88 }}
+          <button
             onClick={(e) => {
               e.stopPropagation();
               onViewNote(note);
             }}
-            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
             title="Expand view"
             aria-label="Expand note view"
           >
             <Maximize2 className="w-3.5 h-3.5" />
-          </motion.button>
+          </button>
 
           {/* Duplicate Button */}
-          <motion.button
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.88 }}
+          <button
             onClick={handleDuplicate}
-            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
             title="Duplicate note"
             aria-label="Duplicate note"
           >
             <CopyPlus className="w-3.5 h-3.5" />
-          </motion.button>
-
-          {/* Export Button */}
-          <motion.button
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.88 }}
-            onClick={handleExport}
-            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
-            title="Export as .txt"
-            aria-label="Export note"
-          >
-            <Download className="w-3.5 h-3.5" />
-          </motion.button>
+          </button>
 
           {/* Edit Button */}
-          <motion.button
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.88 }}
+          <button
             onClick={handleEdit}
-            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
             title="Edit note"
             aria-label="Edit note"
           >
             <Edit3 className="w-3.5 h-3.5" />
-          </motion.button>
+          </button>
 
           {/* Delete Button */}
-          <motion.button
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.88 }}
+          <button
             onClick={handleDelete}
-            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/60 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/60 transition-colors cursor-pointer"
             title="Delete note"
             aria-label="Delete note"
           >
             <Trash2 className="w-3.5 h-3.5" />
-          </motion.button>
+          </button>
         </div>
       </div>
     </motion.div>

@@ -29,8 +29,8 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={{ addToast, showSuccess, showError, showInfo, removeToast }}>
       {children}
-      {/* Toast Container */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0">
+      {/* Toast Container - fits phone screens seamlessly */}
+      <div className="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 left-3 sm:left-auto max-w-full sm:max-w-sm z-50 flex flex-col gap-2 pointer-events-none">
         <AnimatePresence>
           {toasts.map((toast) => (
             <motion.div
@@ -40,7 +40,7 @@ export function ToastProvider({ children }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, y: -10 }}
               transition={{ type: "spring", stiffness: 450, damping: 30 }}
-              className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-2xl shadow-soft-xl border backdrop-blur-md text-sm font-medium ${
+              className={`pointer-events-auto flex items-center justify-between gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl shadow-soft-xl border backdrop-blur-md text-xs sm:text-sm font-medium ${
                 toast.type === "success"
                   ? "bg-emerald-950/90 text-emerald-100 border-emerald-500/30 dark:bg-emerald-950/95 dark:text-emerald-200"
                   : toast.type === "error"
@@ -48,24 +48,24 @@ export function ToastProvider({ children }) {
                   : "bg-slate-900/90 text-slate-100 border-slate-700/50 dark:bg-slate-900/95"
               }`}
             >
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2 min-w-0">
                 {toast.type === "success" && (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 )}
                 {toast.type === "error" && (
-                  <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
+                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                 )}
                 {toast.type === "info" && (
-                  <Sparkles className="w-5 h-5 text-indigo-400 shrink-0" />
+                  <Sparkles className="w-4 h-4 text-indigo-400 shrink-0" />
                 )}
-                <span className="leading-snug">{toast.message}</span>
+                <span className="leading-snug truncate">{toast.message}</span>
               </div>
               <button
                 onClick={() => removeToast(toast.id)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer shrink-0"
                 aria-label="Close notification"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             </motion.div>
           ))}
